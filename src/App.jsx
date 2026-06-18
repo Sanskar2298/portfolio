@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -6,10 +6,11 @@ import About from "./components/About";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Experience from "./components/Experience";
-import ResumeSection from "./components/ResumeSection";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import ScrollCarNavigator from "./components/ScrollCar/ScrollCarNavigator";
+import Cursor from "./components/Cursor";
+import Loader from "./components/Loader";
 
 function SpotlightCursor() {
   const mouseX = useMotionValue(0);
@@ -40,23 +41,32 @@ function SpotlightCursor() {
 }
 
 export default function App() {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <div className="relative min-h-screen bg-base">
-      <SpotlightCursor />
-      <div className="relative z-10">
-        <Navbar />
-        <ScrollCarNavigator />
-        <main>
-          <Hero />
-          <About />
-          <Skills />
-          <Projects />
-          <Experience />
-          <ResumeSection />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
+      {!loaded && <Loader onComplete={() => setLoaded(true)} />}
+
+      <motion.div
+        animate={{ opacity: loaded ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <Cursor />
+        <SpotlightCursor />
+        <div className="relative z-10">
+          <Navbar />
+          <ScrollCarNavigator />
+          <main>
+            <Hero />
+            <About />
+            <Skills />
+            <Projects />
+            <Experience />
+            <Contact />
+          </main>
+          <Footer />
+        </div>
+      </motion.div>
     </div>
   );
 }

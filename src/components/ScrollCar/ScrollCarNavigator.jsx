@@ -133,14 +133,6 @@ export default function ScrollCarNavigator() {
 
       {/* Bottom cap */}
       <div className="w-px h-8 bg-gradient-to-b from-border to-transparent" />
-
-      {/* Section counter */}
-      <span
-        className="mt-2 text-[9px] font-display tabular-nums"
-        style={{ color: "rgba(108,99,255,0.5)" }}
-      >
-        {activeIndex + 1}/{SECTIONS.length}
-      </span>
     </div>
   );
 }

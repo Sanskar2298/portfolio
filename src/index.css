@@ -1,17 +1,23 @@
+/* stylelint-disable at-rule-no-unknown */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  cursor: none;
 }
 
 html {
   scroll-behavior: smooth;
+   scroll-snap-type: y proximity;
+}
+section {
+  scroll-snap-align: start;
 }
 
 body {
@@ -30,13 +36,17 @@ body {
 ::-webkit-scrollbar {
   width: 4px;
 }
+
 ::-webkit-scrollbar-track {
   background: #0A0A0F;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #6C63FF44;
   border-radius: 4px;
 }
+
+
 
 @layer utilities {
   .text-gradient {
@@ -45,17 +55,21 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
   .glow-accent {
     box-shadow: 0 0 40px #6C63FF22, 0 0 80px #6C63FF11;
   }
+
   .card-hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
+
   .card-hover:hover {
     transform: translateY(-4px);
     box-shadow: 0 24px 60px #6C63FF15;
     border-color: #6C63FF44;
   }
+
   .noise-overlay::before {
     content: '';
     position: absolute;

@@ -1,6 +1,57 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import HeroBg from "./HeroBg";
-import sanskarImg from "../assets/sanskar.jpeg";
+import sanskarImg from "../assets/sanskar.png";
+
+const roles = ["AI/ML Engineer", "Full Stack Developer", "Competitive Programmer"];
+
+function Typewriter() {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [phase, setPhase] = useState("typing"); // typing | pausing | deleting
+
+  useEffect(() => {
+    const current = roles[roleIndex];
+
+    if (phase === "typing") {
+      if (displayed.length < current.length) {
+        const t = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 60);
+        return () => clearTimeout(t);
+      } else {
+        const t = setTimeout(() => setPhase("pausing"), 1800);
+        return () => clearTimeout(t);
+      }
+    }
+
+    if (phase === "pausing") {
+      const t = setTimeout(() => setPhase("deleting"), 400);
+      return () => clearTimeout(t);
+    }
+
+    if (phase === "deleting") {
+      if (displayed.length > 0) {
+        const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 35);
+        return () => clearTimeout(t);
+      } else {
+        setRoleIndex((i) => (i + 1) % roles.length);
+        setPhase("typing");
+      }
+    }
+  }, [displayed, phase, roleIndex]);
+
+  return (
+    <div className="flex items-center gap-3 mb-6 h-8">
+      <span className="font-display text-base md:text-lg text-text-muted font-light tracking-wide">
+        {displayed}
+      </span>
+      <motion.span
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ duration: 0.8, repeat: Infinity, ease: "steps(1)" }}
+        className="inline-block w-0.5 h-5 bg-accent"
+      />
+    </div>
+  );
+}
 
 const stagger = {
   hidden: {},
@@ -77,14 +128,9 @@ export default function Hero() {
               <span className="block text-text-primary">Srivastava</span>
             </motion.h1>
 
-            <motion.div variants={item} className="flex items-center gap-3 mb-6">
-              <span className="font-display text-base md:text-lg text-text-muted font-light tracking-wide">
-                AI/ML Engineer
-              </span>
-              <span className="w-1 h-1 rounded-full bg-text-dim" />
-              <span className="font-display text-base md:text-lg text-text-muted font-light tracking-wide">
-                Full Stack Developer
-              </span>
+            {/* Typewriter */}
+            <motion.div variants={item}>
+              <Typewriter />
             </motion.div>
 
             <motion.p
@@ -139,7 +185,6 @@ export default function Hero() {
             transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="relative">
-              {/* Spinning conic ring */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
@@ -149,8 +194,6 @@ export default function Hero() {
                   background: "conic-gradient(from 0deg, #6C63FF, #A78BFA, transparent, #6C63FF)",
                 }}
               />
-
-              {/* Glow behind */}
               <div
                 className="absolute -inset-8 z-0"
                 style={{
@@ -158,8 +201,6 @@ export default function Hero() {
                   filter: "blur(20px)",
                 }}
               />
-
-              {/* Image container */}
               <div
                 className="relative z-10 rounded-3xl overflow-hidden"
                 style={{
@@ -169,31 +210,22 @@ export default function Hero() {
                   border: "1px solid rgba(108,99,255,0.2)",
                 }}
               >
-                {/*
-                  Replace the div below with your photo:
-                  <img src="/profile.jpg" alt="Sanskar Srivastava"
-                    className="w-full h-full object-cover object-top" />
-                */}
                 <img
-                  src={sanskarImg}
+                  src="/profile.jpg"
                   alt="Sanskar Srivastava"
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: "center top" }}
                 />
-
-                {/* Bottom gradient on photo */}
                 <div
                   className="absolute bottom-0 left-0 right-0 h-24 z-10"
                   style={{ background: "linear-gradient(0deg, rgba(14,14,26,0.85) 0%, transparent 100%)" }}
                 />
-
-                {/* Name tag */}
                 <div className="absolute bottom-4 left-4 right-4 z-20">
                   <p className="font-display font-semibold text-text-primary text-sm">Sanskar Srivastava</p>
                   <p className="text-xs text-accent-soft">ECE · NIT Hamirpur</p>
                 </div>
               </div>
 
-              {/* Badge — CGPA */}
               <motion.div
                 animate={{ y: [0, -7, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -207,7 +239,6 @@ export default function Hero() {
                 </div>
               </motion.div>
 
-              {/* Badge — Robotics */}
               <motion.div
                 animate={{ y: [0, 6, 0] }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -222,11 +253,9 @@ export default function Hero() {
               </motion.div>
             </div>
           </motion.div>
-
         </div>
       </div>
 
-      {/* Scroll cue */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
